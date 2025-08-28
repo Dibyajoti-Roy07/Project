@@ -1,0 +1,655 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+body {
+  background: #f9f9f9;
+  transition: background 0.3s, color 0.3s;
+}
+body.dark {
+  background: #121212;
+  color: #f1f1f1;
+}
+.container {
+  width: 100%;
+  text-align: center;
+}
+h1 {
+  font-weight: 600;
+  font-size: 35px;
+  margin: 40px 0;
+  background: linear-gradient(45deg, crimson, orange);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.quote {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #666;
+}
+body.dark .quote {
+  color: #bbb;
+}
+#searchBar {
+  padding: 10px 15px;
+  margin: 10px auto;
+  width: 60%;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+}
+.top-content {
+  background-color: rgb(243, 243, 243);
+  width: 90%;
+  margin: 0 auto 20px auto;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  box-shadow: 3px 3px 10px rgba(0,0,0,.1);
+}
+body.dark .top-content {
+  background: #1e1e1e;
+}
+h3 {
+  padding: 0 20px;
+  color: crimson;
+}
+label {
+  margin: 0 15px;
+  font-size: 16px;
+  color: gray;
+  cursor: pointer;
+  transition: color .3s;
+}
+label:hover {
+  color: crimson;
+}
+.photo-gallery {
+  width: 80%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-gap: 20px;
+}
+.pic {
+  position: relative;
+  height: 220px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform .3s ease;
+  opacity: 0;
+  animation: fadeInUp 0.8s forwards;
+}
+.pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .4s ease;
+}
+.pic:hover {
+  transform: scale(1.05);
+}
+.pic:hover img {
+  transform: scale(1.1);
+}
+.actions {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: flex;
+  gap: 10px;
+  background: rgba(0,0,0,0.5);
+  padding: 5px 10px;
+  border-radius: 20px;
+  color: white;
+}
+.like {
+  cursor: pointer;
+}
+.like.liked {
+  color: red;
+}
+.like-count {
+  margin-left: 3px;
+}
+.lightbox {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.9);
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 9999;
+}
+
+.lightbox-content {
+  max-width: 90%;
+  max-height: 80%;
+}
+
+.lightbox-img {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 10px;
+}
+
+.lightbox-caption {
+  margin-top: 12px;
+  color: #fff;
+  text-align: center;
+  font-size: 16px;
+}
+
+#close {
+  position: absolute;
+  top: 20px; right: 30px;
+  font-size: 30px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.lightbox .close {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  font-size: 40px;
+  color: white;
+  cursor: pointer;
+}
+.lightbox-controls {
+  position: absolute;
+  bottom: 20px;
+  display: flex;
+  gap: 20px;
+}
+.lightbox-controls button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: crimson;
+  color: white;
+  font-size: 18px;
+}
+
+#backToTop {
+  display: none;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  padding: 12px;
+  border-radius: 50%;
+  background: crimson;
+  color: white;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+  z-index: 999;
+}
+.top-bar {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 999;
+}
+.top-bar button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: #eee;
+  font-size: 18px;
+}
+body.dark .top-bar button {
+  background: #444;
+  color: #fff;
+}
+@keyframes fadeInUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+/* Music Bar */
+.music-bar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  background: rgba(0,0,0,0.8);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 10px;
+  border-radius: 12px 12px 0 0;
+  z-index: 1000;
+  box-shadow: 0 -3px 10px rgba(0,0,0,0.3);
+}
+
+.music-bar button {
+  background: crimson;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.music-bar input[type="range"] {
+  width: 150px;
+  cursor: pointer;
+}
+
+.music-bar .track-name {
+  font-size: 14px;
+  font-style: italic;
+}
+/* ========== DARK MODE OVERRIDES (place at END of Mona.css) ========== */
+
+/* Animated aurora background */
+body.dark {
+  background: linear-gradient(-45deg, #0d0d0d, #1a1a40, #330033, #0d0d0d) !important;
+  background-size: 400% 400% !important;
+  animation: gradientMove 15s ease infinite !important;
+  color: #f5f5f5 !important;
+  transition: background 0.6s, color 0.4s;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Headline glow */
+body.dark h1 {
+  background: linear-gradient(45deg, #ff3366, #ffcc00, #33ccff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 12px rgba(255, 51, 102, 0.6);
+}
+
+/* Cards / bars / inputs */
+body.dark .top-content { 
+  background: #1a1a1a !important; 
+  box-shadow: 0 3px 8px rgba(255,255,255,0.08) !important;
+}
+body.dark h3 { color: #ffcc00 !important; }
+body.dark label { color: #cfcfcf !important; }
+body.dark label:hover { color: #ff6699 !important; }
+
+body.dark #searchBar {
+  background: #1c1c1c !important;
+  border: 2px solid #ff3366 !important;
+  color: #fff !important;
+}
+
+/* Gallery cards */
+body.dark .pic {
+  background: #222 !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.5) !important;
+}
+body.dark .pic:hover {
+  transform: scale(1.05);
+  box-shadow:
+    0 0 20px rgba(255, 51, 102, 0.6),
+    0 0 40px rgba(255, 204, 0, 0.5),
+    0 0 60px rgba(51, 204, 255, 0.4) !important;
+}
+
+/* Overlay actions + music bar */
+body.dark .actions { background: rgba(255, 51, 102, 0.85) !important; }
+body.dark .music-bar { background: rgba(20,20,20,0.9) !important; color: #ffcc99 !important; }
+
+#ytMusicToggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 15px;
+  background: crimson;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+/* 🎵 Music Bar Stylish Buttons */
+.music-bar button {
+  border: none;
+  padding: 10px 16px;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #ff512f, #dd2476);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(221, 36, 118, 0.5);
+}
+
+.music-bar button:hover {
+  transform: scale(1.1) translateY(-2px);
+  background: linear-gradient(135deg, #dd2476, #ff512f);
+  box-shadow: 0 6px 18px rgba(221, 36, 118, 0.7);
+}
+
+/* Volume slider styling */
+.music-bar input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 150px;
+  height: 6px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, #ff512f, #dd2476);
+  outline: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.music-bar input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #dd2476;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.music-bar input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  background: #ffcc00;
+  border-color: #ff512f;
+}
+
+/* 🎶 Dark mode glowing version */
+body.dark .music-bar button {
+  background: linear-gradient(135deg, #8e2de2, #4a00e0);
+  box-shadow: 0 0 12px rgba(142, 45, 226, 0.6);
+}
+
+body.dark .music-bar button:hover {
+  box-shadow: 0 0 18px rgba(142, 45, 226, 0.9);
+}
+
+body.dark .music-bar input[type="range"] {
+  background: linear-gradient(90deg, #8e2de2, #4a00e0);
+}
+
+body.dark .music-bar input[type="range"]::-webkit-slider-thumb {
+  border-color: #8e2de2;
+}
+
+/* Stylish Buttons */
+.btn {
+  display: inline-block;
+  padding: 10px 18px;
+  margin: 5px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 30px;
+  border: none;
+  background: linear-gradient(135deg, #ff4b2b, #ff416c);
+  color: white;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  box-shadow: 0 4px 12px rgba(255, 65, 108, 0.4);
+  text-align: center;
+}
+
+.btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 18px rgba(255, 65, 108, 0.6);
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+}
+
+/* Active state (checked filter) */
+input[type="radio"]:checked + .btn {
+  background: linear-gradient(135deg, #ffcc00, #ff9900);
+  box-shadow: 0 0 15px rgba(255, 204, 0, 0.7);
+  color: #fff;
+}
+
+/* Top-bar circular buttons */
+.top-bar button {
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  font-size: 20px;
+  background: linear-gradient(135deg, #36d1dc, #5b86e5);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(91, 134, 229, 0.4);
+}
+
+.top-bar button:hover {
+  transform: rotate(15deg) scale(1.1);
+  box-shadow: 0 6px 18px rgba(91, 134, 229, 0.6);
+}
+
+/* Dark mode glowing effect */
+body.dark .btn {
+  background: linear-gradient(135deg, #ff6a00, #ee0979);
+  box-shadow: 0 0 15px rgba(255, 106, 0, 0.6);
+}
+
+body.dark .btn:hover {
+  box-shadow: 0 0 20px rgba(255, 106, 0, 0.8);
+}
+
+body.dark .top-bar button {
+  background: linear-gradient(135deg, #8e2de2, #4a00e0);
+  box-shadow: 0 0 12px rgba(142, 45, 226, 0.6);
+}
+
+/* 🎨 Fancy Filter Buttons */
+input[type="radio"] {
+  display: none; /* hide the default radio */
+}
+
+label.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 25px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #f0f0f0, #dcdcdc);
+  color: #444;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover animation */
+label.btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+
+/* Ripple effect */
+label.btn::after {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  background: rgba(255,255,255,0.5);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: width 0.5s ease, height 0.5s ease, opacity 0.5s ease;
+}
+label.btn:active::after {
+  width: 200px;
+  height: 200px;
+  opacity: 0;
+}
+
+/* When checked (active filter) */
+input[type="radio"]:checked + label.btn {
+  background: linear-gradient(135deg, #ff4b2b, #ff416c);
+  color: white;
+  box-shadow: 0 0 12px rgba(255, 65, 108, 0.6);
+  transform: scale(1.05);
+}
+
+/* 🌙 Dark mode */
+body.dark label.btn {
+  background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
+  color: #ddd;
+  box-shadow: 0 3px 8px rgba(255,255,255,0.08);
+}
+
+body.dark input[type="radio"]:checked + label.btn {
+  background: linear-gradient(135deg, #ff6a00, #ee0979);
+  color: #fff;
+  box-shadow: 0 0 18px rgba(238, 9, 121, 0.8);
+}
+
+/* 🌈 Unique Colors for Each Filter */
+#check1:checked + label.btn {
+  background: linear-gradient(135deg, #36d1dc, #5b86e5); /* Blue */
+  box-shadow: 0 0 12px rgba(91,134,229,0.7);
+  color: #fff;
+}
+
+#check2:checked + label.btn {
+  background: linear-gradient(135deg, #ff4b2b, #ff416c); /* Red/Pink */
+  box-shadow: 0 0 12px rgba(255,65,108,0.7);
+  color: #fff;
+}
+
+#check3:checked + label.btn {
+  background: linear-gradient(135deg, #00b09b, #96c93d); /* Green */
+  box-shadow: 0 0 12px rgba(0,176,155,0.7);
+  color: #fff;
+}
+
+#check4:checked + label.btn {
+  background: linear-gradient(135deg, #ff6a00, #ee0979); /* Orange/Purple */
+  box-shadow: 0 0 12px rgba(255,106,0,0.7);
+  color: #fff;
+}
+
+#check5:checked + label.btn {
+  background: linear-gradient(135deg, #8e2de2, #4a00e0); /* Purple/Blue */
+  box-shadow: 0 0 12px rgba(142,45,226,0.7);
+  color: #fff;
+}
+
+#check6:checked + label.btn {
+  background: linear-gradient(135deg, #ffcc00, #ff9900); /* Yellow/Gold */
+  box-shadow: 0 0 12px rgba(255,204,0,0.7);
+  color: #fff;
+}
+
+/* Hide all photos by default */
+.photo-gallery .pic {
+  display: none;
+}
+
+/* Show all when "All" is selected */
+#check1:checked ~ .container .photo-gallery .pic {
+  display: block;
+}
+
+/* Show only College */
+#check2:checked ~ .container .photo-gallery .college {
+  display: block;
+}
+
+/* Show only Her Place */
+#check3:checked ~ .container .photo-gallery .her-place {
+  display: block;
+}
+
+/* Show only My Place */
+#check4:checked ~ .container .photo-gallery .my-place {
+  display: block;
+}
+
+/* Show only Visited */
+#check5:checked ~ .container .photo-gallery .visited {
+  display: block;
+}
+
+/* Show only Childhood */
+#check6:checked ~ .container .photo-gallery .childhood {
+  display: block;
+}
+
+#bgMusic {
+  display: none;
+}
+
+#themeToggle {
+  transition: transform 0.5s;
+}
+#themeToggle:active {
+  transform: rotate(360deg);
+}
+
+.equalizer {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 20px;
+}
+
+.equalizer span {
+  display: block;
+  width: 4px;
+  background: #ff3366;
+  border-radius: 2px;
+  animation: bounce 1s infinite ease-in-out;
+}
+
+.equalizer span:nth-child(1) { animation-delay: 0s; }
+.equalizer span:nth-child(2) { animation-delay: 0.2s; }
+.equalizer span:nth-child(3) { animation-delay: 0.4s; }
+.equalizer span:nth-child(4) { animation-delay: 0.6s; }
+.equalizer span:nth-child(5) { animation-delay: 0.8s; }
+
+@keyframes bounce {
+  0%, 100% { height: 4px; }
+  50% { height: 20px; }
+}
+
+.equalizer.paused span {
+  animation-play-state: paused;
+}
+
+.star {
+  position: fixed;
+  top: -10px;
+  color: white;
+  font-size: 10px;
+  pointer-events: none;
+  opacity: 0.9;
+  animation: fall linear forwards;
+  z-index: 9999;
+  text-shadow: 0 0 8px rgba(255,255,255,0.8);
+}
+
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}

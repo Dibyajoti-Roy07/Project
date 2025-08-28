@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Golden Days</title>
+    <link rel="stylesheet" href="mona2.css" />
+    <style>
+      /* Glassmorphism for top-bar and music-bar */
+      .top-bar, .music-bar {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 8px 12px;
+        margin: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      /* Hover effect on images */
+      .photo-gallery .pic img {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 10px;
+      }
+      .photo-gallery .pic img:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      }
+
+      /* Gradient button borders */
+      .btn {
+        border: 2px solid transparent;
+        border-radius: 6px;
+        background-image: linear-gradient(#fff, #fff),
+                          linear-gradient(45deg, #ff6ec4, #7873f5);
+        background-origin: border-box;
+        background-clip: content-box, border-box;
+        transition: transform 0.3s ease;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      /* Theme toggle button animation */
+      #themeToggle {
+        transition: transform 0.3s ease, rotate 0.5s ease;
+      }
+      #themeToggle:active {
+        transform: scale(0.8) rotate(180deg);
+      }
+
+      @keyframes spinAnim {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      #themeToggle.spin {
+        animation: spinAnim 0.6s ease;
+      }
+
+      /* Confetti hearts */
+      .confetti-heart {
+        position: absolute;
+        font-size: 16px;
+        animation: floatUp 1s ease-out forwards;
+        pointer-events: none;
+      }
+      @keyframes floatUp {
+        0% { transform: translateY(0) scale(1); opacity: 1; }
+        100% { transform: translateY(-60px) scale(1.5); opacity: 0; }
+      }
+
+      /* GRADIENT BACKGROUND + QUOTES + SPARKLES */
+      body {
+        background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a1c4fd, #c2e9fb);
+        background-size: 400% 400%;
+        animation: gradientBG 12s ease infinite;
+      }
+      @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      .photo-gallery .pic img:hover {
+        transform: scale(1.05) rotate(1deg);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+      }
+
+      .quote {
+        display: none;
+        font-style: italic;
+        font-size: 1.2rem;
+        animation: fadeIn 1.5s ease;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .sparkle {
+        position: absolute;
+        color: #fff;
+        font-size: 14px;
+        pointer-events: none;
+        animation: floatUp 3s linear forwards;
+      }
+      @keyframes floatUp {
+        from { transform: translateY(0); opacity: 1; }
+        to { transform: translateY(-100px); opacity: 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- THEME TOGGLE + MUSIC -->
+    <div class="top-bar">
+      <button id="themeToggle">🌙</button>
+      <audio id="bgMusic" src="music/bondhu-chol.mp3" autoplay loop muted></audio>
+    </div>
+<!-- 🎶 Stylish Music Bar -->
+<div class="music-bar">
+  <button id="playPause">▶️</button>
+  <div class="equalizer" id="equalizer">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <input type="range" id="volumeControl" min="0" max="1" step="0.05" value="0.5">
+  <span class="track-name">🎵 Bondhu Chol – Anupam Roy</span>
+</div>
+
+    <!-- FILTERS -->
+    <input type="radio" name="Photos" id="check1" checked />
+    <input type="radio" name="Photos" id="check2" />
+    <input type="radio" name="Photos" id="check3" />
+    <input type="radio" name="Photos" id="check4" />
+    <input type="radio" name="Photos" id="check5" />
+    <input type="radio" name="Photos" id="check6" />
+
+    <div class="container">
+      <h1 class="gradient-text">A JOURNEY THROUGH TIME</h1>
+
+      <!-- Quote -->
+      <p class="quote">
+        ✨ "Every picture tells a story, every memory lives forever." ✨
+      </p>
+      <p class="quote">💖 "The best thing about memories is making them together." 💖</p>
+      <p class="quote">🌸 "We didn’t realize we were making memories, we just knew we were having fun." 🌸</p>
+      <p class="quote">🌈 "Good times become good memories, and the best memories last forever." 🌈</p>
+      <p class="quote">✨ "Some moments are too beautiful to be forgotten." ✨</p>
+
+      <!-- Search -->
+      <input type="text" id="searchBar" placeholder="Search photos..." />
+
+      <!-- Buttons -->
+      <div class="top-content">
+        <h3>Filter</h3>
+        <label for="check1" class="btn">All</label>
+        <label for="check2" class="btn">College</label>
+        <label for="check3" class="btn">Her Place</label>
+        <label for="check4" class="btn">My Place</label>
+        <label for="check5" class="btn">Visited</label>
+        <label for="check6" class="btn">Childhood</label>
+      </div>
+
+      <!-- PHOTO GALLERY -->
+      <div class="photo-gallery">
+        <!-- College Photo -->
+        <div
+          class="pic college"
+          data-title="Images/WhatsApp Image 2025-08-09 at 15.56.35 (1).jpeg">
+          <img
+            src="Images/WhatsApp Image 2025-08-09 at 15.56.35 (1).jpeg"
+            alt="College" />
+          <div class="actions">
+            <span class="like">❤️</span> <span class="like-count">0</span>
+            <a
+              href="Images/WhatsApp Image 2025-08-09 at 15.56.35 (1).jpeg"
+              download
+              class="download"
+              >⬇</a
+            >
+          </div>
+        </div>
+
+        <div
+          class="pic college"
+          data-title="College - WhatsApp Image 2025-08-09 at 15.56.36 (1).jpeg">
+          <img
+            src="Images/WhatsApp Image 2025-08-09 at 15.56.36 (1).jpeg"
+            alt="College" />
+          <div class="actions">
+            <span class="like">❤️</span> <span class="like-count">0</span>
+            <a
+              href="Images/WhatsApp Image 2025-08-09 at 15.56.36 (1).jpeg"
+              download
+              class="download"
+              >⬇</a
+            >
+          </div>
+        </div>
+
+        <div
+          class="pic college"
+          data-title="College - WhatsApp Image 2025-08-09 at 15.56.26 (2).jpeg">
+          <img
+            src="Images/WhatsApp Image 2025-08-09 at 15.56.26 (2).jpeg"
+            alt="College" />
+          <div class="actions">
+            <span class="like">❤️</span> <span class="like-count">0</span>
+            <a
+              href="Images/WhatsApp Image 2025-08-09 at 15.56.26 (2).jpeg"
+              download
+              class="download"
+              >⬇</a
+            >
+          </div>
+        </div>
+
+        <div
+          class="pic college"
+          data-title="College - WhatsApp Image 2025-08-09 at 15.56.37 (1).jpeg">
+          <img
+            src="Images/WhatsApp Image 2025-08-09 at 15.56.37 (1).jpeg"
+            alt="College" />
+          <div class="actions">
+            <span class="like">❤️</span> <span class="like-count">0</span>
+            <a
+              href="Images/WhatsApp Image 2025-08-09 at 15.56.37 (1).jpeg"
+              download
+              class="download"
+              >⬇</a
+            >
+          </div>
+        </div>
+
+        <div
+          class="pic college"
+          data-title="College - WhatsApp Image 2025-08-09 at 15.56.27.jpeg">
+          <img
+            src="Images/WhatsApp Image 2025-08-09 at 15.56.27.jpeg"
+            alt="College" />
+          <div class="actions">
+            <span class="like">❤️</span> <span class="like-count">0</span>
+            <a
+              href="Images/WhatsApp Image 2025-08-09 at 15.56.27.jpeg"
+              download
+              class="download"
+              >⬇</a
+            >
+          </div>
+        </div>
+
+        <div class="pic college" data-title="College - Her place.jpeg">
+          <img src="Images/Her place.jpeg" alt="College" />
+          <div class="actions">
+            <span class="like">❤️</span> <span class="like-count">0</span>
+            <a href="Images/Her place.jpeg" download class="download">⬇</a>
+          </div>
+        </div>
+
+        <div
+          class="pic college"
+          data-title="WhatsApp Image 2025-08-11 at 00.52.48.jpeg">
+          <img
+            src="Images/WhatsApp Image 2025-08-11 at 00.52.48.jpeg"
+            alt="College" />
+          <div class="actions">
+            <span class="like">❤️</span> <span class="like-count">0</span>
+            <a
+              href="Images/WhatsApp Image 2025-08-11 at 00.52.48.jpeg"
+              download
+              class="download"
+              >⬇</a
+            >
+          </div>
+        </div>
+
+        <div
+          class="pic college"
+          data-title="College - WhatsApp Image 2025-08-11 at 00.52.47.jpeg">
+          <img
+            src="Images/WhatsApp Image 2025-08-11 at 00.52.47.jpeg"
+            alt="College" />
+          <div class="actions">
+            <span class="like">❤️</span> <span class="like-count">0</span>
+            <a
+              href="Images/WhatsApp Image 2025-08-11 at 00.52.47.jpeg"
+              download
+              class="download"
+              >⬇</a
+            >
+          </div>
+        </div>
+
+        <div
+          class="pic college"
+          data-title="College - WhatsApp Image 2025-08-11 at 01.11.17.jpeg">
+          <img
+            src="Images/WhatsApp Image 2025-08-11 at 01.11.17.jpeg"
+            alt="College" />
+          <div class="actions">
+            <span class="like">❤️</span> <span class="like-count">0</span>
+            <a
+              href="Images/WhatsApp Image 2025-08-11 at 01.11.17.jpeg"
+              download
+              class="download"
+              >⬇</a
+            >
+          </div>
+        </div>
+
+        <div
+          class="pic college"
+          data-title="College - WhatsApp Image 2025-08-11 at 01.11.17 (1).jpeg">
+          <img
+            src="Images/WhatsApp Image 2025-08-11 at 01.11.17 (1).jpeg"
+            alt="College" />
+          <div class="actions">
+            <span class="like">❤️</span> <span class="like-count">0</span>
+            <a
+              href="Images/WhatsApp Image 2025-08-11 at 01.11.17 (1).jpeg"
+              download
+              class="download"
+              >⬇</a
+            >
+          </div>
+        </div>
+
+    <!-- Example for HER PLACE -->
+    <div class="pic her-place" data-title="Her Place - WhatsApp Image 2025-08-09 at 15.13.52 (2).jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.13.52 (2).jpeg" alt="Her Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-count">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.13.52 (2).jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic her-place" data-title="Her Place - WhatsApp Image 2025-08-09 at 13.58.32.jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 13.58.32.jpeg" alt="Her Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-count">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 13.58.32.jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic her-place" data-title="Her Place - WhatsApp Image 2025-08-09 at 15.13.55.jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.13.55.jpeg" alt="Her Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-count">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.13.55.jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic her-place" data-title="Her Place - WhatsApp Image 2025-08-09 at 15.13.51.jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.13.51.jpeg" alt="Her Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-count">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.13.51.jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic her-place" data-title="Her Place - Her place2.jpeg">
+      <img src="Images/Her place2.jpeg" alt="Her Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-count">0</span>
+        <a href="Images/Her place2.jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic her-place" data-title="Her Place - WhatsApp Image 2025-08-09 at 13.58.30.jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 13.58.30.jpeg" alt="Her Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-count">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 13.58.30.jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic her-place" data-title="Her Place - WhatsApp Image 2025-08-09 at 15.13.52 (1).jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.13.52 (1).jpeg" alt="Her Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-count">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.13.52 (1).jpeg" download class="download">⬇</a></div>
+    </div>
+
+ <!-- Example for MY PLACE -->
+    <div class="pic my-place" data-title="my Place - WhatsApp Image 2025-08-09 at 15.56.29 (1).jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.56.29 (1).jpeg" alt="My Place">
+      <div class="actions"><span class="like">❤️</span><a href="Images/WhatsApp Image 2025-08-09 at 15.56.29 (1).jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic my-place" data-title="my Place - WhatsApp Image 2025-08-09 at 15.56.29.jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.56.29.jpeg" alt="My Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.56.29.jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic my-place" data-title="MY Place - WhatsApp Image 2025-08-09 at 15.56.30.jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.56.30.jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.56.30.jpeg" download class="download">⬇</a></div>
+    </div>
+
+     <div class="pic my-place" data-title="MY Place - WhatsApp Image 2025-08-09 at 15.56.31.jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.56.31.jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.56.31.jpeg" download class="download">⬇</a></div>
+    </div>
+
+     <div class="pic my-place" data-title="MY Place - WhatsApp Image 2025-08-09 at 15.56.30 (2).jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.56.30 (2).jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.56.30 (2).jpeg" download class="download">⬇</a></div>
+    </div>
+
+     <div class="pic my-place" data-title="MY Place - WhatsApp Image 2025-08-09 at 15.56.30 (1).jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.56.30 (1).jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.56.30 (1).jpeg" download class="download">⬇</a></div>
+    </div>
+
+     <div class="pic my-place" data-title="MY Place - WhatsApp Image 2025-08-11 at 01.14.38.jpeg">
+      <img src="Images/WhatsApp Image 2025-08-11 at 01.14.38.jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-11 at 01.14.38.jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <!-- Example for VISITED PLACES -->
+    <div class="pic visited" data-title="Visited - WhatsApp Image 2025-08-09 at 15.14.18 (2).jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.14.18 (2).jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.14.18 (2).jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic visited" data-title="Visited - WhatsApp Image 2025-08-09 at 15.14.18.jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.14.18.jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.14.18.jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic visited" data-title="Visited - WhatsApp Image 2025-08-09 at 15.56.31 (2).jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.56.31 (2).jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.56.31 (2).jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic visited" data-title="Visited - WhatsApp Image 2025-08-09 at 15.56.33 (1).jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.56.33 (1).jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.56.33 (1).jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic visited" data-title="Visited - WhatsApp Image 2025-08-09 at 15.56.22.jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.56.22.jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.56.22.jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic visited" data-title="Visited - WhatsApp Image 2025-08-09 at 15.56.25 (1).jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.56.25 (1).jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.56.25 (1).jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic visited" data-title="Visited - WhatsApp Image 2025-08-09 at 15.56.25 (2).jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.56.25 (2).jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.56.25 (2).jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic visited" data-title="Visited - WhatsApp Image 2025-08-09 at 15.14.18 (1).jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.14.18 (1).jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.14.18 (1).jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic visited" data-title="Visited - WhatsApp Image 2025-08-09 at 13.58.32 (1).jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 13.58.32 (1).jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 13.58.32 (1).jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic visited" data-title="Visited - WhatsApp Image 2025-08-11 at 01.11.16 (1).jpeg">
+      <img src="Images/WhatsApp Image 2025-08-11 at 01.11.16 (1).jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-11 at 01.11.16 (1).jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic visited" data-title="Visited - WhatsApp Image 2025-08-11 at 01.11.16.jpeg">
+      <img src="Images/WhatsApp Image 2025-08-11 at 01.11.16.jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-11 at 01.11.16.jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic visited" data-title="visited - WhatsApp Image 2025-08-11 at 01.11.17 (2).jpeg">
+      <img src="Images/WhatsApp Image 2025-08-11 at 01.11.17 (2).jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-11 at 01.11.17 (2).jpeg" download class="download">⬇</a></div>
+    </div>
+
+     <div class="pic visited" data-title="visited - WhatsApp Image 2025-08-11 at 01.11.18 (1).jpeg">
+      <img src="Images/WhatsApp Image 2025-08-11 at 01.11.18 (1).jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-11 at 01.11.18 (1).jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <!-- Example for CHILDHOOD -->
+    <div class="pic childhood" data-title="childhood - WhatsApp Image 2025-08-09 at 15.56.35.jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.56.35.jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.56.35.jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic childhood" data-title="childhood - WhatsApp Image 2025-08-09 at 15.56.34.jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.56.34.jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.56.34.jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic childhood" data-title="childhood - WhatsApp Image 2025-08-09 at 15.56.34 (2).jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.56.34 (2).jpeg" alt="MY Place">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.56.34 (2).jpeg" download class="download">⬇</a></div>
+    </div>
+
+    <div class="pic childhood" data-title="childhood - WhatsApp Image 2025-08-09 at 15.56.34 (1).jpeg">
+      <img src="Images/WhatsApp Image 2025-08-09 at 15.56.34 (1).jpeg" alt="childhood">
+      <div class="actions"><span class="like">❤️</span> <span class="like-coun">0</span>
+        <a href="Images/WhatsApp Image 2025-08-09 at 15.56.34 (1).jpeg" download class="download">⬇</a></div>
+    </div>
+  </div>
+</div>
+
+        <!-- (keep all your other photos the same way, just ensure each has .like and .like-count inside) -->
+      </div>
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox">
+  <span id="close">✖</span>
+  <div class="lightbox-content">
+    <img src="" class="lightbox-img" />
+    <div class="lightbox-caption"></div>
+  </div>
+  <div class="lightbox-controls">
+    <button id="prev">⏮</button>
+    <button id="play">▶</button>
+    <button id="fullscreen">⛶</button>
+    <button id="next">⏭</button>
+  </div>
+</div>
+
+    <!-- BACK TO TOP -->
+    <button id="backToTop">⬆</button>
+
+    <!-- BACKGROUND MUSIC (already defined above, removed duplicate) -->
+
+    <script>
+      // Back to Top
+      const backToTop = document.getElementById("backToTop");
+      window.addEventListener("scroll", () => {
+        backToTop.style.display = window.scrollY > 200 ? "block" : "none";
+      });
+      backToTop.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      // Search
+      document
+        .getElementById("searchBar")
+        .addEventListener("input", function () {
+          const term = this.value.toLowerCase();
+          document.querySelectorAll(".pic").forEach((pic) => {
+            const title = pic.getAttribute("data-title").toLowerCase();
+            pic.style.display = title.includes(term) ? "" : "none";
+          });
+        });
+    </script>
+    <script>
+window.addEventListener("load", () => {
+  const bgMusic = document.getElementById("bgMusic");
+
+  // Try to autoplay
+  bgMusic.play().catch(() => {
+    console.log("Autoplay blocked until user interaction.");
+  });
+
+  // Unmute and play when user interacts
+  document.addEventListener("click", () => {
+    if (bgMusic.muted) {
+      bgMusic.muted = false;
+      bgMusic.play();
+    }
+  }, { once: true });
+});
+function startStarShower() {
+  setInterval(() => {
+    const star = document.createElement("span");
+    const isDark = document.body.classList.contains("dark");
+
+    star.className = isDark ? "star" : "star-light";
+    star.textContent = "✨";
+
+    star.style.left = Math.random() * window.innerWidth + "px";
+    star.style.fontSize = Math.random() * 12 + 8 + "px";
+    star.style.animationDuration = Math.random() * 3 + 2 + "s";
+
+    document.body.appendChild(star);
+
+    setTimeout(() => star.remove(), 5000);
+  }, 300);
+}
+
+startStarShower();
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // === Theme Toggle (single logic) ===
+        const themeBtn = document.getElementById("themeToggle");
+        if (themeBtn) {
+          const saved = localStorage.getItem("theme");
+          if (saved === "dark") {
+            document.body.classList.add("dark");
+            themeBtn.textContent = "☀️";
+          } else {
+            themeBtn.textContent = "🌙";
+          }
+          themeBtn.addEventListener("click", () => {
+            const isDark = document.body.classList.toggle("dark");
+            // Add smooth transition for theme toggling
+            document.body.style.transition = "background-color 0.5s ease, color 0.5s ease";
+            // Animation for theme button
+            themeBtn.classList.add("spin");
+            setTimeout(() => themeBtn.classList.remove("spin"), 600);
+            setTimeout(() => {
+              document.body.style.transition = "";
+            }, 600);
+            themeBtn.textContent = isDark ? "☀️" : "🌙";
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+          });
+        }
+
+        // Like Button with Counter and Confetti Hearts
+        document.querySelectorAll(".like").forEach((likeBtn) => {
+          likeBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const count = e.target.nextElementSibling;
+            const liked = e.target.classList.toggle("liked");
+            count.textContent = parseInt(count.textContent) + (liked ? 1 : -1);
+
+            if (liked) {
+              // create floating heart
+              const heart = document.createElement("span");
+              heart.textContent = "💖";
+              heart.className = "confetti-heart";
+              heart.style.left = e.pageX + "px";
+              heart.style.top = e.pageY + "px";
+              document.body.appendChild(heart);
+              setTimeout(() => heart.remove(), 1000);
+            }
+          });
+        });
+
+        // 🎵 Filter-based background music (unified bgMusic audio element)
+        const bgMusic = document.getElementById("bgMusic");
+        function switchTrack(src) {
+          if (bgMusic.getAttribute("src") !== src) {
+            bgMusic.src = src;
+            bgMusic.play().catch(() => {
+              console.log("Autoplay blocked until interaction.");
+            });
+          }
+        }
+        document.getElementById("check1").addEventListener("change", () => {
+          if (document.getElementById("check1").checked) {
+            switchTrack("music/bondhu-chol.mp3");
+          }
+        });
+                document.getElementById("check2").addEventListener("change", () => {
+          if (document.getElementById("check2").checked) {
+            switchTrack("music/bondhu-chol.mp3");
+          }
+        });
+                document.getElementById("check3").addEventListener("change", () => {
+          if (document.getElementById("check3").checked) {
+            switchTrack("music/bondhu-chol.mp3");
+          }
+        });
+
+        document.getElementById("check4").addEventListener("change", () => {
+          if (document.getElementById("check4").checked) {
+            switchTrack("music/bondhu-chol.mp3");
+          }
+        });
+        document.getElementById("check5").addEventListener("change", () => {
+          if (document.getElementById("check5").checked) {
+            switchTrack("music/bondhu-chol.mp3");
+          }
+        });
+                document.getElementById("check6").addEventListener("change", () => {
+          if (document.getElementById("check6").checked) {
+            switchTrack("music/bondhu-chol.mp3");
+          }
+        });
+
+        // === Music Bar Controls ===
+        const playPauseBtn = document.getElementById("playPause");
+        const volumeControl = document.getElementById("volumeControl");
+        const equalizer = document.getElementById("equalizer");
+
+        if (playPauseBtn && bgMusic) {
+          playPauseBtn.addEventListener("click", () => {
+            if (bgMusic.paused) {
+              bgMusic.play();
+              playPauseBtn.textContent = "⏸️";
+              equalizer.classList.remove("paused");
+            } else {
+              bgMusic.pause();
+              playPauseBtn.textContent = "▶️";
+              equalizer.classList.add("paused");
+            }
+          });
+        }
+
+        if (volumeControl && bgMusic) {
+          volumeControl.addEventListener("input", (e) => {
+            bgMusic.volume = e.target.value;
+          });
+        }
+
+        // === Lightbox Logic (single block) ===
+        const lightbox = document.querySelector(".lightbox");
+        const lightboxImg = document.querySelector(".lightbox-img");
+        const lightboxCaption = document.querySelector(".lightbox-caption");
+        const closeBtn = document.getElementById("close");
+        const prevBtn = document.getElementById("prev");
+        const nextBtn = document.getElementById("next");
+        const photos = document.querySelectorAll(".photo-gallery .pic");
+        let currentIndex = 0;
+
+        // Open lightbox when photo clicked
+        photos.forEach((pic, index) => {
+          const img = pic.querySelector("img");
+          img.addEventListener("click", () => {
+            currentIndex = index;
+            showLightbox();
+          });
+        });
+
+        function showLightbox() {
+          const pic = photos[currentIndex];
+          lightbox.style.display = "flex";
+          lightboxImg.src = pic.querySelector("img").src;
+          lightboxCaption.textContent = pic.dataset.title || "";
+        }
+
+        // Close lightbox
+        closeBtn.addEventListener("click", () => {
+          lightbox.style.display = "none";
+        });
+        // Close when clicking outside image
+        lightbox.addEventListener("click", (e) => {
+          if (e.target === lightbox) {
+            lightbox.style.display = "none";
+          }
+        });
+        // Next / Prev navigation
+        nextBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          currentIndex = (currentIndex + 1) % photos.length;
+          showLightbox();
+        });
+        prevBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+          showLightbox();
+        });
+      // Quote rotation
+      const quotes = document.querySelectorAll(".quote");
+      let qIndex = 0;
+      function showQuotes() {
+        quotes.forEach((q, i) => q.style.display = i === qIndex ? "block" : "none");
+        qIndex = (qIndex + 1) % quotes.length;
+      }
+      if (quotes.length > 0) {
+        showQuotes();
+        setInterval(showQuotes, 4000);
+      }
+
+      // Sparkles animation
+      setInterval(() => {
+        const sparkle = document.createElement("span");
+        sparkle.className = "sparkle";
+        sparkle.textContent = "✨";
+        sparkle.style.left = Math.random() * window.innerWidth + "px";
+        sparkle.style.top = window.innerHeight + "px";
+        document.body.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 3000);
+      }, 1000);
+      });
+
+    </script>
+  </body>
+</html>
